@@ -45,6 +45,7 @@ We welcome contributions from the community to enhance Annoiance and make it eve
 
 For any questions, issues, or feedback, please reach out to us at [abbeykojoeric@gmail.com](mailto:abbeykojoeric@gmail.com). Our team is dedicated to providing timely assistance and ensuring a smooth experience with Annoiance.
  -->
+
 ## License
 
 Annoiance is licensed under the [MIT License](link_to_license), allowing for flexibility in usage and modification. Refer to the license file for more details.
