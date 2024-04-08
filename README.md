@@ -49,6 +49,5 @@ For any questions, issues, or feedback, please reach out to us at [abbeykojoeric
 ## License
 
 Annoiance is licensed under the [MIT License](link_to_license), allowing for flexibility in usage and modification. Refer to the license file for more details.
----
 
 [Annoiance](https://github.com/annoiance) - Forms on website can't be that annoying.

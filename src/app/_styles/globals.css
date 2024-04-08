@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    box-sizing: 0;
+    padding: 0;
+    margin: 0;
+    @apply font-mono
+  }
+
+}
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
