@@ -39,12 +39,18 @@ class SetupConfig {
     }
 
     /**
-     * Checks if the setup file exists.
-     * @returns {string} - 'fileExist' if the setup file exists, otherwise 'fileNotFound'.
-     */
-    fileExist = (): string => {
+ * Checks if the setup file exists and reads its content.
+ * @returns {Object} - An object containing the file data and an optional stage value.
+ *                     - If the file exists, returns { data: "FILE_NOT_FOUND", stage: stageValue }.
+ *                     - If the file does not exist, returns { data: "FILE_FOUND" }.
+ */
+
+    fileExist = (): { data: string, stage?: string } => {
         const exists = fs.existsSync(this.setupFilePath);
-        return exists ? fileExist : fileNotFound;
+        if (!exists) return { data: fileNotFound }
+
+        let data = JSON.parse(fs.readFileSync(this.setupFilePath, 'utf-8') || '{}') as { stage: string }
+        return { data: fileExist, stage: data.stage }
     }
 
 

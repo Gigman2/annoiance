@@ -1,6 +1,6 @@
 'use client'
 import Button from '@/app/_components/button';
-import { validateAll } from '@/app/_components/form';
+import { validateAfterFocus, validateAll } from '@/app/_components/form';
 import InputGroup from '@/app/_components/form/InputGroup';
 import { makeRequest } from '@/app/_utils/clientUtils';
 import { useRouter } from 'next/navigation'
@@ -12,8 +12,8 @@ function validateMongoDBUrl(url: string): boolean {
 }
 const DatabaseConfig = () => {
     const [ formData, setFormData ]  = useState<Record<string, string>>({
-        connection: "",
-        database: ""
+        dbConnection: "",
+        dbDatabase: ""
     })
     const [ focusState, setFocusState ]  = useState<Record<string, boolean>>({})
     const [ errors, setErrors ]  = useState<Record<string, string|  undefined>>({})
@@ -33,6 +33,11 @@ const DatabaseConfig = () => {
             }
         }
     }, [formData])
+
+    useEffect(() => {
+        validateAfterFocus(formData, focusState, setErrors)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [focusState])
 
     const testConnection = async () => {
         try {
@@ -84,7 +89,7 @@ const DatabaseConfig = () => {
                     <div className='mt-4'>
                     <h4 className='font-mono text-slate-500'>Connection String</h4>
                     <InputGroup
-                        field="connection" 
+                        field="dbConnection" 
                         formData={formData} 
                         setFormData={setFormData}
                         errors={errors}
@@ -101,7 +106,7 @@ const DatabaseConfig = () => {
                     <div className='mt-4'>
                     <h4 className='font-mono text-slate-500'>Database name</h4>
                     <InputGroup
-                        field="database" 
+                        field="dbDatabase" 
                         formData={formData} 
                         setFormData={setFormData}
                         errors={errors}

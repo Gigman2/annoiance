@@ -32,7 +32,7 @@ const Setup = () => {
         const res = await makeRequest('setup-config','POST', {...formData, stage: "ACCOUNT"})
         setSubmitting(false)
         if(res){
-          router.push('database-config')
+          router.push('setup/database-config')
         }
       }
     } catch (error) {

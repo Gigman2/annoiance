@@ -1,6 +1,8 @@
 'use client'
-import Button from '@/app/components/button'
-import InputGroup from '@/app/components/form/InputGroup'
+import Button from '@/app/_components/button';
+import { validateAfterFocus, validateAll } from '@/app/_components/form';
+import InputGroup from '@/app/_components/form/InputGroup';
+import { makeRequest } from '@/app/_utils/clientUtils';
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
@@ -12,22 +14,36 @@ function validateMongoDBUrl(url: string): boolean {
 const DatabaseConfig = () => {
     const router = useRouter()
     const [ formData, setFormData ]  = useState<Record<string, string>>({
-        host: "",
-        port: "",
-        user: "",
-        password: ""
+        smtpHost: "",
+        smtpPort: "",
+        smtpUser: "",
+        smtpPass: ""
     })
     const [ focusState, setFocusState ]  = useState<Record<string, boolean>>({})
     const [ errors, setErrors ]  = useState<Record<string, string|  undefined>>({})
+    const [submitting, setSubmitting] = useState(false)
 
     useEffect(() => {
-        if(formData.connection){
-            const isValid = validateMongoDBUrl(formData.connection)
-            if(!isValid){
-                setErrors(prev => ({...prev, connection: "Invalid MongoDB URL"}))
+        validateAfterFocus(formData, focusState, setErrors)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [focusState])
+
+
+    const handleClick = async () => {
+        try {
+            const isValid = validateAll(formData, setErrors)
+            if(isValid){
+                setSubmitting(true)
+                const res = await makeRequest('setup-config','POST', {...formData, stage: "MAILER"})
+                setSubmitting(false)
+                if(res){
+                    router.push('final-stage')
+                }
             }
+        } catch (error) {
+            console.log(error)
         }
-    }, [formData])
+    };
     return (
         <div className='flex justify-center my-5'>
             <div className='w-9/12'>
@@ -40,7 +56,7 @@ const DatabaseConfig = () => {
                         <div className='w-8/12'>
                             <h4 className='font-mono text-slate-500'>SMTP Host</h4>
                             <InputGroup
-                                field="host" 
+                                field="smtpHost" 
                                 formData={formData} 
                                 setFormData={setFormData}
                                 errors={errors}
@@ -53,7 +69,7 @@ const DatabaseConfig = () => {
                             <h4 className='font-mono text-slate-500'>SMTP Port</h4>
                             <InputGroup
                                 type='number'
-                                field="port" 
+                                field="smtpPort" 
                                 formData={formData} 
                                 setFormData={setFormData}
                                 errors={errors}
@@ -68,7 +84,7 @@ const DatabaseConfig = () => {
                     <div className='mt-4'>
                         <h4 className='font-mono text-slate-500'>SMTP Username</h4>
                         <InputGroup
-                            field="user" 
+                            field="smtpUser" 
                             formData={formData} 
                             setFormData={setFormData}
                             errors={errors}
@@ -82,7 +98,8 @@ const DatabaseConfig = () => {
                     <div className='mt-4'>
                         <h4 className='font-mono text-slate-500'>SMTP Password</h4>
                         <InputGroup
-                            field="password" 
+                            type='password'
+                            field="smtpPass" 
                             formData={formData} 
                             setFormData={setFormData}
                             errors={errors}
@@ -96,7 +113,7 @@ const DatabaseConfig = () => {
                 </div>
 
                 <div className='mt-10 w-full flex justify-between'>
-                    <Button 
+                    <Button
                         color='blue'
                         type='line'
                         isDisabled={!!Object.values(errors).filter(Boolean).length} 
@@ -104,22 +121,14 @@ const DatabaseConfig = () => {
                     />
 
                     <div className='flex gap-2'>
-                        <Link href={'setup/database-config'}>
-                            <Button 
-                                color='stone'
-                                type='solid'
-                                isDisabled={!!Object.values(errors).filter(Boolean).length} 
-                                title={'Test'} 
-                            />
-                        </Link>
-                        <Link href={'setup/database-config'}>
-                            <Button 
-                                color='blue'
-                                type='solid'
-                                isDisabled={!!Object.values(errors).filter(Boolean).length} 
-                                title={'Continue'} 
-                            />
-                        </Link>
+                        <Button 
+                            color='blue'
+                            type='solid'
+                            isDisabled={!!Object.values(errors).filter(Boolean).length} 
+                            title={'Continue'} 
+                            isLoading={submitting}
+                            onClick={() => handleClick()}
+                        />
                     </div>
                 </div>
             </div>
