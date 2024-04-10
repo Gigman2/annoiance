@@ -9,9 +9,10 @@ interface IButtonProps {
     isLoading?: boolean,
     type: string,
     color: string,
+    onClick?: () => void;
     [x:string]: any
 }
-const Button = ({title, isDisabled, isLoading, type, color, ...rest}: IButtonProps) => {
+const Button = ({title, isDisabled, isLoading, type, color, onClick, ...rest}: IButtonProps) => {
     const inactiveProps = "cursor-not-allowed"
     const activeProps = "cursor-pointer"
 
@@ -29,7 +30,11 @@ const Button = ({title, isDisabled, isLoading, type, color, ...rest}: IButtonPro
     }
 
     return (
-        <button {...rest} className={`${rest.className ? rest.className : 'px-10 py-2 rounded-md'} ${isActiveStyle} ${buttonStyle[type as keyof typeof buttonStyle]}`}>
+        <button 
+            {...rest} 
+            className={`${rest.className ? rest.className : 'px-10 py-2 rounded-md'} ${isActiveStyle} ${buttonStyle[type as keyof typeof buttonStyle]}`}
+            onClick={() => !(isDisabled || isLoading) ? onClick && onClick() :  null}
+        >
             {isLoading ? <div className="loader ease-linear rounded-full border-2 border-t-4 border-white h-7 w-7 animate-spin"></div> : title}
         </button>
     )

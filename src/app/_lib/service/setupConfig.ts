@@ -54,8 +54,10 @@ class SetupConfig {
     }
 
 
-    dbConnection = async (payload: { connection: string }): Promise<string | null> => {
+    dbConnection = async (payload: any): Promise<string | null> => {
         try {
+            if (payload && !payload.connection) return null
+
             const conn = await testDbConnection(payload.connection)
             if (conn) {
                 return 'success'

@@ -5,6 +5,7 @@ import InputGroup from '@/app/_components/form/InputGroup';
 import { makeRequest } from '@/app/_utils/clientUtils';
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
+import { Toaster, toast } from 'sonner';
 
 function validateMongoDBUrl(url: string): boolean {
     const pattern: RegExp = /^mongodb(?:\+srv)?:\/\/(?:[^:]+:[^@]+@)?([^\/?]+)(?:\?.*)?$/;
@@ -42,21 +43,23 @@ const DatabaseConfig = () => {
     const testConnection = async () => {
         try {
             setTesting(true)
-            if(!formData.connection){
-                setErrors(prev => ({...prev, connection: "Connection string cant be empty"}))
+            if(!formData.dbConnection){
+                setErrors(prev => ({...prev, dbConnection: "Connection string cant be empty"}))
             }
             const {data} = await makeRequest<{data: 'success' | null}>(
                 'setup-config/database', 
                 "POST", 
-                JSON.stringify({connection: formData.connection})
+                JSON.stringify({connection: formData.dbConnection})
             )
+            console.log(data)
             if(data !== 'success'){
-                setErrors(prev => ({...prev, connection: "Failed to establish connection"}))
+                toast.error('Failed to establish a database connection')
+            }else {
+                toast.success('Connection was successful you can proceed')
             }
             setTesting(false)
         } catch (error) {
             setTesting(false)
-            console.error('Error fetching data:', error);
         }
     };
 
@@ -68,15 +71,17 @@ const DatabaseConfig = () => {
                 const res = await makeRequest('setup-config','POST', {...formData, stage: "DATABASE"})
                 setSubmitting(false)
                 if(res){
-                    router.push('setup/mailer-config')
+                    router.push('/setup/mailer-config')
                 }
             }
         } catch (error) {
             console.log(error)
         }
     };
+
     return (
         <div className='flex justify-center my-5'>
+            <Toaster position="top-right" />
             <div className='w-9/12'>
                 <h3 className='text-xl text-slate-500 text-bold'>Setup the database</h3>
                 <h3 className='text-sm text-slate-400'>
@@ -126,6 +131,7 @@ const DatabaseConfig = () => {
                         title={'Back'} 
                         onClick={() => router.back()}
                     />
+
 
                     <div className='flex gap-2'>
                         <Button
