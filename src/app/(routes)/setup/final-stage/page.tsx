@@ -1,15 +1,18 @@
 'use client'
-import Button from '@/app/_components/button';
-import { validateAfterFocus, validateAll } from '@/app/_components/form';
-import InputGroup from '@/app/_components/form/InputGroup';
-import { makeRequest } from '@/app/_utils/clientUtils';
-import Link from 'next/link'
+
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import welcomeCss from '@/app/_components/welcome/welcome.module.css'
 
 const FinalStage = () => {
     const router = useRouter()
+
+    useEffect(() => {
+        setTimeout(() => {
+                router.push('/dashboard')
+        }, 1500)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[])
 
 
     return (
