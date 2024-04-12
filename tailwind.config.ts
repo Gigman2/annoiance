@@ -7,5 +7,15 @@ const config: Config = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   plugins: [],
+  theme: {
+    extend: {
+      colors: {
+        'yellow': '#ffeda8',
+        'yellow-light': '#fffbe5',
+        'yellow-dark': '#3b3210'
+      },
+    }
+  }
+
 };
 export default config;

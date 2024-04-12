@@ -40,37 +40,37 @@ const DashboardLayout  = ({
 }) => {
   return (
     <div className="w-screen h-screen flex items-center justify-center bg-slate-200 relative">
-        <div className=' h-screen w-2/12 bg-sky-300 pt-8 pl-8 z-20'>
-            <h1 className={`text-4xl font-bold text-sky-950 mb-3 ${jura.className}`}>Annoiance</h1>
+        <div className=' h-screen w-2/12 bg-yellow pt-8 pl-8 z-20'>
+            <h1 className={`text-4xl font-bold text-yellow-dark mb-3 ${jura.className}`}>Annoiance</h1>
 
             <div className='mt-20'>
                 {   
                     MenuItems.map(item =>(
                         <div key={item.name} className='relative'>
                             {item.active ? <>
-                                <div className='absolute top-0 -mt-5 right-0 -mr-6 w-10 h-10 bg-slate-100 rounded-full z-20'></div> 
-                                <div className='absolute top-0 -mt-10 right-0 -mr-0 w-10 h-10 bg-sky-300 rounded-full z-20'></div> 
+                                <div className='absolute top-0 -mt-5 right-0 -mr-6 w-10 h-10 bg-yellow-light rounded-full z-20'></div> 
+                                <div className='absolute top-0 -mt-10 right-0 -mr-0 w-10 h-10 bg-yellow rounded-full z-20'></div> 
                             </>: null}
                             <Link href={item.path}>
-                                <div className={`cursor-pointer pl-3 relative z-10 py-5 text-md flex items-center gap-2 ${item.active ? 'bg-slate-100' : 'bg-transparent'} rounded-s-3xl`}>
+                                <div className={`cursor-pointer pl-3 relative z-10 py-5 text-md flex items-center gap-2 ${item.active ? 'bg-yellow-light' : 'bg-transparent'} rounded-s-2xl`}>
                                     <item.Icon fontSize={18} className='text-sky-950'/>
                                     <p className='text-sky-950'>{item.name}</p>
                                 </div>
                             </Link>
                             {item.active ? <>
-                                <div className='absolute bottom-0 -mb-5 right-0 -mr-6 w-10 h-10 bg-slate-100 rounded-full z-20'></div> 
-                                <div className='absolute bottom-0 -mb-10 right-0 -mr-0 w-10 h-10 bg-sky-300 rounded-full z-20'></div> 
+                                <div className='absolute bottom-0 -mb-5 right-0 -mr-6 w-10 h-10 bg-yellow-light rounded-full z-20'></div> 
+                                <div className='absolute bottom-0 -mb-10 right-0 -mr-0 w-10 h-10 bg-yellow rounded-full z-20'></div> 
                             </>: null}
                         </div>
                     ))
                 }
             </div>
         </div>
-        <div className='h-screen flex-auto w-full bg-slate-100'>
-            <div className='w-full h-14 bg-white flex'>
+        <div className='h-screen flex-auto w-full bg-yellow-light'>
+            <div className='w-full h-16 bg-white flex drop-shadow-sm'>
                 <div className='flex px-5 w-full justify-end items-center gap-4'>
-                    <p className='text-sky-900'>Eric </p>
-                    <TbPower className='text-2xl text-sky-900 cursor-pointer'/>
+                    <p className='text-yellow-dark'>Eric </p>
+                    <TbPower className='text-2xl text-yellow-dark cursor-pointer'/>
                 </div>
             </div>
             <div className='w-full h-auto p-7 box-border'>
