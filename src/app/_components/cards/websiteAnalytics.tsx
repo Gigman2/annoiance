@@ -1,7 +1,8 @@
+import { ILinkedSites } from '@/app/_mock/websiteData'
 import React, { Dispatch, SetStateAction } from 'react'
 import { TbArrowBadgeRight, TbArrowBadgeRightFilled } from 'react-icons/tb'
 
-const WebsiteAnalyticsCard = ({data, active, setActive}: {data: {name: string, link: string}[], active?: number, setActive: Dispatch<SetStateAction<typeof active>>}) => {
+const WebsiteAnalyticsCard = ({data, active, setActive}: {data: ILinkedSites[], active?: number, setActive: Dispatch<SetStateAction<typeof active>>}) => {
     const getStatusIcon = {
         CONNECTED:  <TbArrowBadgeRightFilled fontSize={20} />,
         PENDING: <TbArrowBadgeRight fontSize={20} />
@@ -17,7 +18,7 @@ const WebsiteAnalyticsCard = ({data, active, setActive}: {data: {name: string, l
                     <p className='flex-1'>{item.name}</p>
                 </div>
 
-                <p className={`text-xs font-semibold ${idx === active ? 'text-inherit' : 'text-gray-400'} capitalize`}>{(idx === active ? 'CONNECTED' : "PENDING").toLowerCase()}</p>
+                <p className={`text-xs font-semibold ${item.status === 'CONNECTED' ? 'text-amber-500' : 'text-gray-400'} capitalize`}>{item.status.toLowerCase()}</p>
             </div>)
         )}
         <div className='absolute bottom-1 w-full'>

@@ -6,12 +6,15 @@ import {
   ChartOptions,
   ChartTypeRegistry
 } from 'chart.js';
-import { LineChart } from '../charts/line';
+import { LineChart } from '../../charts/line';
 import { lineChartData, options } from '@/app/_utils/constants';
 import { IWebsiteTraffic, linkedSites, websiteTrafficData } from '@/app/_mock/websiteData';
+import { LineLegendArea } from './lineLegendArea';
 
 
 type IFilterDateOptions = '7h' | '12h' | '1d' | '7d'
+
+const suffixAmPm = (h: number) => `${h % 12 === 0 ? 12 : h % 12}${h < 12 ? 'am' : 'pm'}`;
 
 function groupDataByInterval(data: IWebsiteTraffic[], option: IFilterDateOptions) {
     // Determine the interval based on the selected option
@@ -52,7 +55,14 @@ function groupDataByInterval(data: IWebsiteTraffic[], option: IFilterDateOptions
 
      // Group the filtered data by the determined interval
     const groupedData = intervals.reduce((acc, intervalStart) => {
-        const key = interval === 24 ? intervalStart.toDateString() : intervalStart.getUTCHours();
+        let key;
+        if (interval === 24) {
+            key = intervalStart.toDateString();
+        } else {
+            const hour = intervalStart.getUTCHours();
+            key = suffixAmPm(hour); // Use the suffixAmPm function to add AM/PM suffix
+        }
+
         acc[key] = 0
         return acc;
     }, {} as Record<string | number, number>);
@@ -60,7 +70,13 @@ function groupDataByInterval(data: IWebsiteTraffic[], option: IFilterDateOptions
     // Populate the intervals with data
     filteredData.forEach(item => {
         const date = new Date(item.createdAt);
-        const key = interval === 24 ? date.toDateString() : date.getUTCHours();
+        let key;
+        if (interval === 24) {
+            key = date.toDateString();
+        } else {
+            const hour = date.getUTCHours();
+            key = suffixAmPm(hour); // Use the suffixAmPm function to add AM/PM suffix
+        }
         if (groupedData[key] != undefined) {
             groupedData[key] += 1;
         }
@@ -68,63 +84,6 @@ function groupDataByInterval(data: IWebsiteTraffic[], option: IFilterDateOptions
 
 
     return groupedData;
-}
-
-
-
-export interface LegendAreaProps<T extends keyof ChartTypeRegistry> {
- chart: Chart | null;
- data: ChartData<T>;
- options: ChartOptions<T>;
-}
-
-const LegendArea: React.FC<LegendAreaProps<'line'>> = ({ chart, data, options }) => {
-  const legendRef = useRef<HTMLDivElement>(null);
-  const [hiddenItems, setHiddenItems] = useState<number[]>([])
-
-  useEffect(() => {
-      if (chart && data && options) {
-        chart.update();
-      }
-  }, [chart, data, options]);
-
-  const handleLegendClick = (datasetIndex: number) => {
-    if (chart) {
-      const ci = chart;
-      ci?.data?.datasets?.forEach((_, i) => {
-        const meta = ci.getDatasetMeta(i);
-
-        if (i === datasetIndex) {
-          meta.hidden =  !meta.hidden 
-          if(meta.hidden){
-            setHiddenItems(prev => [...prev, datasetIndex]);
-          } else {
-            setHiddenItems(prev => prev.filter(number => number !== datasetIndex));
-          }
-        }
-      });
-      ci.update();
-    }
- };
-
-  return <div className='flex justify-between items-center' >
-    <div className='mb-2'  ref={legendRef}> 
-      {data.datasets.map((item, i) => (
-        <div 
-          className='flex gap-2 items-center mb-1 cursor-pointer' 
-          key={item.label} 
-          onClick={() => handleLegendClick(i)}
-        >
-          <div 
-            className={`w-3 h-3 rounded-full border border-md`} 
-            style={{backgroundColor: hiddenItems.includes(i) ? 'white' :item.backgroundColor as string, borderColor: item.backgroundColor as string}}>
-
-            </div>
-          <p className={`text-xs text-gray-500 ${hiddenItems.includes(i) ? 'line-through': 'no-underline'}`} >{item.label}</p>
-        </div>
-      ))}
-    </div>
-  </div>
 }
 
 
@@ -138,19 +97,21 @@ export const TrafficAnalytics: React.FC<ChartProps> = ({ active }) => {
   const chartRef = useRef<any>(null);
   const [legendArea, setLegendArea] = useState<React.ReactNode | null>(null);
   const [data, setData] = useState<typeof websiteTrafficData>([])
-  const [filter, setFilter] = useState()
-  const [chartData, setChartData] = useState<ChartData<'line'>>(lineChartData)
+  const [filter, setFilter] = useState<IFilterDateOptions>('7h')
+  const [chartData, setChartData] = useState<{labels: string[], data: number[]}>({
+    labels: [],
+    data: []
+  })
 
-//   useEffect(() => { 
-//     if (chartRef.current) {
-//         const chart = chartRef.current;
-//         if(chart){
-//           chart.update();
-//           const chartOptions = options || {}; 
-//           setLegendArea(<LegendArea chart={chart} data={data} options={chartOptions} />);
-//         }
-//     }
-//   }, []);
+  useEffect(() => { 
+    if (chartRef.current) {
+        const chart = chartRef.current;
+        if(chart){
+          chart.update();
+          setLegendArea(<LineLegendArea chart={chart} />);
+        }
+    }
+  }, []);
 
     useEffect(() => {
         if(active !== undefined){
@@ -161,16 +122,17 @@ export const TrafficAnalytics: React.FC<ChartProps> = ({ active }) => {
     },[active])
 
     useEffect(() => {
-        const groupedData = groupDataByInterval(data, '12h')
-        lineChartData.labels = Object.keys(groupedData) || []
-        lineChartData.datasets[0].data = Object.values(groupedData)
-        setChartData(lineChartData)
+        const groupedData = groupDataByInterval(data, filter)
+        setChartData({labels: Object.keys(groupedData), data: Object.values(groupedData)})
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     },[data])
 
 
     return <div className='w-full pb-2'>
-            <div>
-                {legendArea}
+            <div className='flex justify-between items-center'>
+                <div>
+                  {legendArea}
+                </div>
                 <div>
                     <div className='border rounded border-gray-300 py-1 px-2 w-40 text-xs text-gray-600'>
                         Last 7 hours

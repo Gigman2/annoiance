@@ -22,11 +22,11 @@ export const options = {
 
 
 export const lineChartData: ChartData<'line'> = {
-    labels: [],
+    labels: ['1', '3', '15', '17', '19', '21', '23'],
     datasets: [
         {
             label: 'Data from websites',
-            data: [],
+            data: [1, 0, 0, 0, 1, 1, 0],
             borderColor: 'rgb(59, 50, 16)',
             backgroundColor: 'rgba(59, 50, 16, 1)',
             pointRadius: 0,

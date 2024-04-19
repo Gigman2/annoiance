@@ -1,13 +1,13 @@
 'use client'
 
 import AnalyticsCard from '@/app/_components/cards/analyticsCard';
-import { TrafficAnalytics } from '@/app/_components/cards/trafficAnalytics';
+import { TrafficAnalytics } from '@/app/_components/cards/trafficAnalytics/trafficAnalytics';
 import WebsiteAnalyticsCard from '@/app/_components/cards/websiteAnalytics';
 import DoughnutChart from '@/app/_components/charts/doughnut';
 import { linkedSites } from '@/app/_mock/websiteData';
 import { doughnutChartData, doughnutChartOptions } from '@/app/_utils/constants';
 import React, { useState } from 'react'
-import { TbStarFilled } from 'react-icons/tb'
+import { TbChartLine, TbStarFilled } from 'react-icons/tb'
 
 
 
@@ -34,9 +34,21 @@ const DashboardHome = () => {
 
 
           <div className='w-6/12'>
-            <AnalyticsCard  id={'insight-analytics'} title='Usage for completefarmer.org' description='You will see here, the time series of the incoming data and the mails forwarded'>
+            <AnalyticsCard  id={'insight-analytics'} 
+              title={active !== undefined ? 'Usage for completefarmer.org' : 'Website usage'} 
+              description={active !== undefined ? 'You will see here, the time series of the incoming data and the mails forwarded' : "Select a website on the pages sections to see its traffic"}>
               <div className='h-60'>
-                <TrafficAnalytics active={active as number}/>
+                {
+                  active !== undefined ? <TrafficAnalytics active={active as number}/> : 
+                  <div className='w-full'>
+                    <div className='text-gray-400 text-sm'>Select a website on the pages sections to see its traffic</div>
+
+                    <div className='mt-20 text-gray-500 flex flex-col  text-sm justify-center items-center text-center'>
+                      <TbChartLine fontSize={48} />
+                      <p>Nothing to show here</p>
+                    </div>
+                  </div>
+                }
               </div>
             </AnalyticsCard>
           </div>
