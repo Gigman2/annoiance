@@ -1,14 +1,8 @@
 'use client'
 import React, { useEffect, useRef, useState } from 'react';
-import {
-  Chart,
-  ChartData,
-  ChartOptions,
-  ChartTypeRegistry
-} from 'chart.js';
 import { LineChart } from '../../charts/line';
-import { lineChartData, options } from '@/app/_utils/constants';
-import { IWebsiteTraffic, linkedSites, websiteTrafficData } from '@/app/_mock/websiteData';
+import { options } from '@/app/_utils/constants';
+import { IWebsiteTraffic, linkedSites, websiteTrafficData, mailTrafficData, IMailTraffic } from '@/app/_mock/websiteData';
 import { LineLegendArea } from './lineLegendArea';
 
 
@@ -16,7 +10,7 @@ type IFilterDateOptions = '7h' | '12h' | '1d' | '7d'
 
 const suffixAmPm = (h: number) => `${h % 12 === 0 ? 12 : h % 12}${h < 12 ? 'am' : 'pm'}`;
 
-function groupDataByInterval(data: IWebsiteTraffic[], option: IFilterDateOptions) {
+function groupDataByInterval(data: IWebsiteTraffic[] | IMailTraffic[], option: IFilterDateOptions) {
     // Determine the interval based on the selected option
     let interval;
     switch (option) {
@@ -96,9 +90,9 @@ interface ChartProps {
 export const TrafficAnalytics: React.FC<ChartProps> = ({ active }) => {
   const chartRef = useRef<any>(null);
   const [legendArea, setLegendArea] = useState<React.ReactNode | null>(null);
-  const [data, setData] = useState<typeof websiteTrafficData>([])
+  const [data, setData] = useState<[typeof websiteTrafficData, typeof mailTrafficData ]>()
   const [filter, setFilter] = useState<IFilterDateOptions>('7h')
-  const [chartData, setChartData] = useState<{labels: string[], data: number[]}>({
+  const [chartData, setChartData] = useState<{labels: string[], data: number[][]}>({
     labels: [],
     data: []
   })
@@ -116,14 +110,16 @@ export const TrafficAnalytics: React.FC<ChartProps> = ({ active }) => {
     useEffect(() => {
         if(active !== undefined){
             const activeSite = linkedSites[active]
-            const filteredData = websiteTrafficData.filter(item => item.siteName === activeSite.link)
-            setData(filteredData || [])
+            const filteredWebsiteData = websiteTrafficData.filter(item => item.siteName === activeSite.link)
+            const filteredMailData = mailTrafficData.filter(item => item.forSite === activeSite.link)
+            setData([filteredWebsiteData, filteredMailData])
         }
     },[active])
 
     useEffect(() => {
-        const groupedData = groupDataByInterval(data, filter)
-        setChartData({labels: Object.keys(groupedData), data: Object.values(groupedData)})
+        const groupedWebsiteData = groupDataByInterval(data?.[0] || [], filter)
+         const groupedMailData = groupDataByInterval(data?.[1] || [], filter)
+        setChartData({labels: Object.keys(groupedWebsiteData), data: [Object.values(groupedWebsiteData), Object.values(groupedMailData) ]})
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[data])
 
@@ -131,7 +127,7 @@ export const TrafficAnalytics: React.FC<ChartProps> = ({ active }) => {
     return <div className='w-full pb-2'>
             <div className='flex justify-between items-center'>
                 <div>
-                  {legendArea}
+                    {legendArea}
                 </div>
                 <div>
                     <div className='border rounded border-gray-300 py-1 px-2 w-40 text-xs text-gray-600'>

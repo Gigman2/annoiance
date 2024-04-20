@@ -26,7 +26,7 @@ ChartJS.register(
 
 
 interface ChartProps {
-  data: {labels: string[], data: number[]};
+  data: {labels: string[], data: number[][]};
   options?: ChartOptions<'line'>;
   chartRef?: MutableRefObject<any>
 }
@@ -42,9 +42,9 @@ export const LineChart: React.FC<ChartProps> = ({ data, options, chartRef }) => 
     const newDatasets: ChartData<'line'>['datasets'] = [...lineChartData.datasets];
     let newLabels:ChartData<'line'>['labels'] = [...lineChartData.labels || []];
 
-    if (data.data) {
-      newDatasets[0].data = data.data;
-    }
+    data.data.forEach((item, i) => {
+      newDatasets[i].data = item
+    })
     if (data.labels) {
       newLabels = data.labels;
     }
