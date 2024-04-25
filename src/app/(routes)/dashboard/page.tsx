@@ -56,7 +56,17 @@ const DashboardHome = () => {
           <div className='w-3/12'>
             <AnalyticsCard  id={'pages-analytics'} title='Page Segmentation' description='You will see here, the time series of the incoming data and the mails forwarded'>
               <div className='h-60'>
-                <DoughnutChart data={doughnutChartData} options={doughnutChartOptions} />
+                {
+                  active !== undefined ? <DoughnutChart data={doughnutChartData} options={doughnutChartOptions} /> : 
+                  <div className='w-full'>
+                    <div className='text-gray-400 text-sm'>Select a website on the pages sections to see its traffic</div>
+
+                    <div className='mt-20 text-gray-500 flex flex-col  text-sm justify-center items-center text-center'>
+                      <TbChartLine fontSize={48} />
+                      <p>Nothing to show here</p>
+                    </div>
+                  </div>
+                }
               </div>
             </AnalyticsCard>
           </div>
