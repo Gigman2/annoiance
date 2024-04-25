@@ -1,5 +1,4 @@
 import { lineChartData } from "@/app/_utils/constants";
-import { ChartTypeRegistry } from "chart.js";
 import React, { useEffect, useRef, useState } from "react";
 
 

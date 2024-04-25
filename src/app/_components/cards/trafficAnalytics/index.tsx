@@ -136,7 +136,7 @@ export const TrafficAnalytics: React.FC<ChartProps> = ({ active }) => {
                 </div>
             </div>
             <div className="h-40">
-            <LineChart chartRef={chartRef} options={options} data={chartData} />
+                <LineChart chartRef={chartRef} options={options} data={chartData} />
             </div>
         </div>;
     }

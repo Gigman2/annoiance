@@ -1,7 +1,8 @@
 'use client'
 
 import AnalyticsCard from '@/app/_components/cards/analyticsCard';
-import { TrafficAnalytics } from '@/app/_components/cards/trafficAnalytics/trafficAnalytics';
+import PageAnalytics from '@/app/_components/cards/pageAnalytics';
+import { TrafficAnalytics } from '@/app/_components/cards/trafficAnalytics';
 import WebsiteAnalyticsCard from '@/app/_components/cards/websiteAnalytics';
 import DoughnutChart from '@/app/_components/charts/doughnut';
 import { linkedSites } from '@/app/_mock/websiteData';
@@ -57,7 +58,7 @@ const DashboardHome = () => {
             <AnalyticsCard  id={'pages-analytics'} title='Page Segmentation' description='You will see here, the time series of the incoming data and the mails forwarded'>
               <div className='h-60'>
                 {
-                  active !== undefined ? <DoughnutChart data={doughnutChartData} options={doughnutChartOptions} /> : 
+                  active !== undefined ? <PageAnalytics active={active as number}/> : 
                   <div className='w-full'>
                     <div className='text-gray-400 text-sm'>Select a website on the pages sections to see its traffic</div>
 

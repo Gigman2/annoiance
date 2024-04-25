@@ -11,11 +11,11 @@ export const linkedSites: ILinkedSites[] = [
     { name: "Completefarmer", link: "completefarmer.com", status: "CONNECTED" }
 ]
 
-export const websitePages = [
-    { 'kuantu.org': ['contact', 'booking'] },
-    { 'completefarmer.com': ['careers', 'contact', 'support'] },
-    { 'gwarthur.org': ['contact', 'testimonies', 'newsletter', 'partnership'] }
-]
+export const websitePages = {
+    'kuantu.org': ['contact', 'booking'],
+    'completefarmer.com': ['careers', 'contact', 'support'],
+    'gwarthur.org': ['contact', 'testimonies', 'newsletter', 'partnership']
+}
 export interface IWebsiteTraffic {
     _id: string;
     siteName: string;
@@ -23,9 +23,8 @@ export interface IWebsiteTraffic {
     createdAt: Date;
 }
 
-const randomWebsitePageObject = websitePages[Math.floor(Math.random() * websitePages.length)];
-const websiteDomain = Object.keys(randomWebsitePageObject)[0];
-const pages = randomWebsitePageObject[websiteDomain as keyof typeof randomWebsitePageObject];
+const randomWebsitePagesKey = faker.helpers.arrayElement(Object.keys(websitePages));
+const pages = websitePages[randomWebsitePagesKey as keyof typeof websitePages]
 const randomPage = (pages as string[])[Math.floor(Math.random() * (pages as string[]).length)];
 function createWebsiteTraffic(): IWebsiteTraffic {
     return {
