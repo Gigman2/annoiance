@@ -3,8 +3,9 @@ import { useEffect, useRef, useState } from "react";
 
 export interface IDoughnutLegendArea {
  chart: Chart | null;
+ labels?: string[]
 }
-const DoughnutLegendArea: React.FC<IDoughnutLegendArea> = ({ chart}) => {
+const DoughnutLegendArea: React.FC<IDoughnutLegendArea> = ({ chart, labels}) => {
   const legendRef = useRef<HTMLDivElement>(null);
   const [hiddenItems, setHiddenItems] = useState<number[]>([])
   const [chartData, setChartData] = useState(doughnutChartData)
@@ -23,7 +24,6 @@ const DoughnutLegendArea: React.FC<IDoughnutLegendArea> = ({ chart}) => {
 
       ci?.data?.datasets?.[0]?.data?.forEach((_, i) => {
         if (i === datasetIndex) {
-          console.log('Meta ', meta.data[datasetIndex])
           meta.data[datasetIndex].hidden = !meta.data[datasetIndex].hidden;
           if(meta.data[datasetIndex].hidden){
             setHiddenItems(prev => [...prev, datasetIndex]);
@@ -38,7 +38,7 @@ const DoughnutLegendArea: React.FC<IDoughnutLegendArea> = ({ chart}) => {
 
   return <div className='flex items-center gap-3' >
     <div className='mb-2'  ref={legendRef}> 
-      {chartData?.labels?.map((item: string, i: number) => (
+      {labels?.map((item: string, i: number) => (
         <div 
           className='flex gap-2 items-center mb-1 cursor-pointer' 
           key={item} 
@@ -57,3 +57,5 @@ const DoughnutLegendArea: React.FC<IDoughnutLegendArea> = ({ chart}) => {
     </div>
   </div>
 }
+
+export default DoughnutLegendArea

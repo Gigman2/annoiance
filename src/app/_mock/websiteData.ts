@@ -25,12 +25,11 @@ export interface IWebsiteTraffic {
 
 const randomWebsitePagesKey = faker.helpers.arrayElement(Object.keys(websitePages));
 const pages = websitePages[randomWebsitePagesKey as keyof typeof websitePages]
-const randomPage = (pages as string[])[Math.floor(Math.random() * (pages as string[]).length)];
 function createWebsiteTraffic(): IWebsiteTraffic {
     return {
         _id: faker.string.uuid(),
         siteName: faker.helpers.arrayElement(linkedSites).link,
-        page: randomPage,
+        page: faker.helpers.arrayElement(pages),
         createdAt: faker.date.recent({ days: 1 })
     };
 }

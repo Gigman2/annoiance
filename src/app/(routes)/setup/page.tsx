@@ -36,7 +36,7 @@ const Setup = () => {
         }
       }
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   };
 

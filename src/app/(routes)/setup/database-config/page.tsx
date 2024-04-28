@@ -51,7 +51,6 @@ const DatabaseConfig = () => {
                 "POST", 
                 JSON.stringify({connection: formData.dbConnection})
             )
-            console.log(data)
             if(data !== 'success'){
                 toast.error('Failed to establish a database connection')
             }else {
@@ -75,7 +74,7 @@ const DatabaseConfig = () => {
                 }
             }
         } catch (error) {
-            console.log(error)
+            console.error(error)
         }
     };
 

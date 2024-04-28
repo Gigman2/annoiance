@@ -1,5 +1,6 @@
 import { faker } from "@faker-js/faker";
 import { ChartData } from "chart.js";
+import { generateRandomColors } from "../_lib/helpers/misc";
 
 export const options = {
     responsive: true,
@@ -62,18 +63,12 @@ export const doughnutChartOptions = {
 };
 
 export const doughnutChartData = {
-    labels: [
-        'completefarmer.com',
-        'gwarthur.org',
-        'loveeconomychurch.org'
-    ],
+    labels: [],
     datasets: [{
-        data: [300, 50, 100],
-        backgroundColor: [
-            'rgb(255, 191, 0)',
-            'rgba(59, 50, 16, 1)',
-            'rgba(59, 50, 16, 1)'
-        ],
+        data: [],
+        backgroundColor: generateRandomColors(6),
         hoverOffset: 10
     }]
 };
+
+// 'rgba(59, 50, 16, 1)'
