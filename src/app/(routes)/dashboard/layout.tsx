@@ -39,7 +39,7 @@ const DashboardLayout  = ({
   children: React.ReactNode;
 }) => {
   return (
-    <div className="w-screen h-screen flex items-center justify-center bg-slate-200 relative">
+    <div className="w-screen h-screen flex items-center justify-center bg-slate-200 relative overflow-hidden">
         <div className=' h-screen w-2/12 bg-yellow pt-8 pl-8 z-20'>
             <h1 className={`text-4xl font-bold text-yellow-dark mb-3 ${jura.className}`}>Annoiance</h1>
 
@@ -73,7 +73,7 @@ const DashboardLayout  = ({
                     <TbPower className='text-2xl text-yellow-dark cursor-pointer'/>
                 </div>
             </div>
-            <div className='w-full h-auto p-7 box-border'>
+            <div className='w-full h-full p-7 box-border overflow-y-scroll pb-12'>
                 {children}
             </div>
         </div>
