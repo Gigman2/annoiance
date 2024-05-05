@@ -4,16 +4,16 @@ import AnalyticsCard from '@/app/_components/cards/analyticsCard';
 import PageAnalytics from '@/app/_components/cards/pageAnalytics';
 import { TrafficAnalytics } from '@/app/_components/cards/trafficAnalytics';
 import WebsiteAnalyticsCard from '@/app/_components/cards/websiteAnalytics';
-import DoughnutChart from '@/app/_components/charts/doughnut';
 import { linkedSites } from '@/app/_mock/websiteData';
-import { doughnutChartData, doughnutChartOptions } from '@/app/_utils/constants';
-import React, { useState } from 'react'
+import { useLayoutStore } from '@/app/_store/layout';
+import React, { useEffect, useState } from 'react'
 import { TbChartLine, TbStarFilled } from 'react-icons/tb'
 
 
 
 const DashboardHome = () => {
   const [active, setActive] = useState<number | undefined>()
+
 
   return (
     <div className='w-full'>
