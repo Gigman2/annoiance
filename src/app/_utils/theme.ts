@@ -1,8 +1,22 @@
 export const colorScheme = {
+    base: {
+        bg: {
+            light: 'bg-yellow-dark',
+            default: 'bg-yellow-dark'
+        },
+        text: {
+            light: 'text-yellow-dark',
+            default: 'text-yellow-dark'
+        },
+        border: {
+            light: 'border-yellow-dark',
+            default: 'border-yellow-dark'
+        }
+    },
     blue: {
         bg: {
             light: 'bg-blue-400',
-            default: 'bg-blue-700',
+            default: 'bg-bg-blue-700',
         },
         text: {
             light: 'text-blue-400',
