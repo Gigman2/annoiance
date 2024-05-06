@@ -1,6 +1,7 @@
 'use client'
 import Button from '@/app/_components/button'
 import React, { useEffect } from 'react'
+import { TbDotsVertical } from 'react-icons/tb'
 
 function Website() {
     return (
@@ -18,11 +19,11 @@ function Website() {
             <table className='table-auto w-full mt-4'>
             <thead className='text-left'>
                 <tr>
-                <th className='py-2'>Website</th>
-                <th>URL</th>
-                <th>Allowed Host</th>
-                <th>Status</th>
-                <th>Created Date</th>
+                    <th className='py-2'>Website</th>
+                    <th>URL</th>
+                    <th>Allowed Host</th>
+                    <th>Status</th>
+                    <th>Created Date</th>
                 </tr>
             </thead>
             <tbody>
@@ -34,6 +35,7 @@ function Website() {
                         <div className='inline-block px-2 rounded-sm text-green-400 bg-green-100'>Active</div>
                     </td>
                     <td className='text-gray-700 text-sm'>21st May 24</td>
+                    <td className='text-gray-700 text-sm'><TbDotsVertical /></td>
                 </tr>
             </tbody>
             </table>
